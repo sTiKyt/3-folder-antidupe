@@ -61,21 +61,18 @@ def folder_to_list(FOLDER):
     FILES_SORTED[2] = listdir(FOLDER+'videos/')
     return FILES_SORTED
 
-def list_to_sha256(FILES_SORTED):#incomplete
+def list_to_sha256(FILES_SORTED,FOLDER):
     HASH_SORTED = [[],[],[]]
     PATHS_SORTED = [[],[],[]]
-
-    PATHS_SORTED = FILES_SORTED.copy()#temporary
-
-   # for l1 in range(len(FILES_SORTED[0])):
-    #    PATHS_SORTED[l1][l2] = .append(sha256(PATHS_SORTED[0][l1].encode('utf-8')).hexdigest())
-
-    for l1 in range(len(PATHS_SORTED[0])):
-        HASH_SORTED[0].append(sha256(PATHS_SORTED[0][l1].encode('utf-8')).hexdigest())
-    for l1 in range(len(PATHS_SORTED[1])):
-        HASH_SORTED[1].append(sha256(PATHS_SORTED[1][l1].encode('utf-8')).hexdigest())
-    for l1 in range(len(PATHS_SORTED[2])):
-        HASH_SORTED[2].append(sha256(PATHS_SORTED[2][l1].encode('utf-8')).hexdigest())
+    for l1 in range(len(FILES_SORTED[0])):
+        PATHS_SORTED[0].append(FOLDER+'files/'+FILES_SORTED[0][l1])
+    for l1 in range(len(FILES_SORTED[1])):
+        PATHS_SORTED[1].append(FOLDER+'photos/'+FILES_SORTED[1][l1])
+    for l1 in range(len(FILES_SORTED[2])):
+        PATHS_SORTED[2].append(FOLDER+'videos/'+FILES_SORTED[2][l1])
+    for l1 in range(len(PATHS_SORTED)):
+        for l2 in range(len(PATHS_SORTED[l1])):
+            HASH_SORTED[l1].append(sha256(PATHS_SORTED[l1][l2].encode('utf-8')).hexdigest())
     return HASH_SORTED
 
 def load_db_to_list(): #TODO make
@@ -117,7 +114,7 @@ if not path.isfile(DB_NAME):#If the database doesn't exists
     FIRST_LAUNCH = create_db()#We create it and note that down
 
 FILES_SORTED = folder_to_list(FOLDER)#Then the folder files get into the file list
-HASH_SORTED = list_to_sha256(FILES_SORTED)#Then the file list gets converted to a sha256 list
+HASH_SORTED = list_to_sha256(FILES_SORTED,FOLDER)#Then the file list gets converted to a sha256 list
 #clean_sha256()#Then the sha256 list gets cleaned of duplicates
 #dupes_to_dupe_list()#Then the duplicated files get into a dupe list
 #move_dirty()#Then duplicates are being moved to a DUPES folder
