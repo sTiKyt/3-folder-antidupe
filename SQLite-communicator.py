@@ -22,13 +22,13 @@ def clean_dupe_list():#incomplete
     for l1 in HASH_SORTED[2]:
         print(l1)#temporary
 
-def clean_sha256():#incomplete
-    for l1 in HASH_SORTED[0]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[1]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[2]:
-        print(l1)#temporary
+def clean_sha256(HASH_SORTED):#incomplete
+    HASH_SORTED_CLEAN = [[],[],[]]
+    for l1 in range(len(HASH_SORTED[0])):
+        HASH_SORTED_CLEAN[0].append(HASH_SORTED[0][l1])
+
+    print(HASH_SORTED_CLEAN[0])#temporary
+    return HASH_SORTED_CLEAN
 
 def clean_sha256_with_db():#incomplete
     for l1 in HASH_SORTED[0]:
@@ -61,7 +61,8 @@ def folder_to_list(FOLDER):
     FILES_SORTED[2] = listdir(FOLDER+'videos/')
     return FILES_SORTED
 
-def list_to_sha256(FILES_SORTED,FOLDER):
+def list_to_sha256(FILES_SORTED,FOLDER):#incomplete
+    FILES_LISTED = [[],[],[]]
     HASH_SORTED = [[],[],[]]
     PATHS_SORTED = [[],[],[]]
     for l1 in range(len(FILES_SORTED[0])):
@@ -70,6 +71,9 @@ def list_to_sha256(FILES_SORTED,FOLDER):
         PATHS_SORTED[1].append(FOLDER+'photos/'+FILES_SORTED[1][l1])
     for l1 in range(len(FILES_SORTED[2])):
         PATHS_SORTED[2].append(FOLDER+'videos/'+FILES_SORTED[2][l1])
+    
+
+    
     for l1 in range(len(PATHS_SORTED)):
         for l2 in range(len(PATHS_SORTED[l1])):
             HASH_SORTED[l1].append(sha256(PATHS_SORTED[l1][l2].encode('utf-8')).hexdigest())
@@ -115,7 +119,7 @@ if not path.isfile(DB_NAME):#If the database doesn't exists
 
 FILES_SORTED = folder_to_list(FOLDER)#Then the folder files get into the file list
 HASH_SORTED = list_to_sha256(FILES_SORTED,FOLDER)#Then the file list gets converted to a sha256 list
-#clean_sha256()#Then the sha256 list gets cleaned of duplicates
+#HASH_SORTED = clean_sha256(HASH_SORTED)#Then the sha256 list gets cleaned of duplicates
 #dupes_to_dupe_list()#Then the duplicated files get into a dupe list
 #move_dirty()#Then duplicates are being moved to a DUPES folder
 #clean_dupe_list()#Then the dupe list gets removed
@@ -131,4 +135,4 @@ if not FIRST_LAUNCH:
 
 #TODO add progress visualization
 
-print(HASH_SORTED)#temporary
+#print(HASH_SORTED)#temporary
