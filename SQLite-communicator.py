@@ -62,7 +62,6 @@ def folder_to_list(FOLDER):
     return FILES_SORTED
 
 def list_to_sha256(FILES_SORTED,FOLDER):#incomplete
-    FILES_LISTED = [[],[],[]]
     HASH_SORTED = [[],[],[]]
     PATHS_SORTED = [[],[],[]]
     for l1 in range(len(FILES_SORTED[0])):
@@ -72,11 +71,17 @@ def list_to_sha256(FILES_SORTED,FOLDER):#incomplete
     for l1 in range(len(FILES_SORTED[2])):
         PATHS_SORTED[2].append(FOLDER+'videos/'+FILES_SORTED[2][l1])
     
-
-    
     for l1 in range(len(PATHS_SORTED)):
         for l2 in range(len(PATHS_SORTED[l1])):
-            HASH_SORTED[l1].append(sha256(PATHS_SORTED[l1][l2].encode('utf-8')).hexdigest())
+            with open(PATHS_SORTED[l1][l2], 'rb') as file:
+                #TEMP = str(file.read())
+                HASH_SORTED[l1].append(sha256(file.read()).hexdigest())
+            
+    print(HASH_SORTED[0][0])#temporary
+    
+#    for l1 in range(len(PATHS_SORTED)):
+#        for l2 in range(len(PATHS_SORTED[l1])):
+#            HASH_SORTED[l1].append(sha256(PATHS_SORTED[l1][l2].encode('utf-8')).hexdigest())
     return HASH_SORTED
 
 def load_db_to_list(): #TODO make
