@@ -75,7 +75,7 @@ def list_to_sha256(FILES_SORTED,FOLDER):#incomplete
         for l2 in range(len(PATHS_SORTED[l1])):
             with open(PATHS_SORTED[l1][l2], 'rb') as file:
                 #TEMP = str(file.read())
-                HASH_SORTED[l1].append(sha256(file.read()).hexdigest())
+                HASH_SORTED[l1].append(sha256(file.read()).hexdigest())#I/O crime
             
     print(HASH_SORTED[0][0])#temporary
     
