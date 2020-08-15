@@ -22,15 +22,13 @@ def all_files(FILES_SORTED):
             NUMBER += 1
     return NUMBER
 
-def any_to_sha256(in1):
-    output = ''
-    with open(in1, "rb") as f:
-        h = sha256()
-        while c := f.read(8192):
-            h.update(c)
-    output = h.hexdigest()
-    print(output)
-    return output
+def any_to_sha256(FILES_SORTED):
+    with open(FILES_SORTED, "rb") as FILE:
+        HASH = sha256()
+        while CHUNK := FILE.read(8192):
+            HASH.update(CHUNK)
+    OUT = HASH.hexdigest()
+    return OUT
 
 def clean_dupe_list():#incomplete
     for l1 in HASH_SORTED[0]:
@@ -79,7 +77,7 @@ def folder_to_list(FOLDER):
     FILES_SORTED[2] = listdir(FOLDER+'videos/')
     return FILES_SORTED
 
-def list_to_sha256(FILES_SORTED,FOLDER,ALL):#incomplete
+def list_to_sha256(FILES_SORTED,FOLDER,ALL):
     HASH_SORTED = [[],[],[]]
     PATHS_SORTED = [[],[],[]]
     PROGRESS = 0
@@ -93,7 +91,7 @@ def list_to_sha256(FILES_SORTED,FOLDER,ALL):#incomplete
         for l2 in range(len(PATHS_SORTED[l1])):
             HASH_SORTED[l1].append(any_to_sha256(PATHS_SORTED[l1][l2]))
             PROGRESS += 1
-            print("\rProgress: " + PROGRESS + " of " + ALL)
+            print("Progress: " + str(PROGRESS) + " of " + str(ALL), end="\r")
     return HASH_SORTED
 
 def load_db_to_list(): #TODO make
