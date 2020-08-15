@@ -14,6 +14,16 @@ FILES_SORTED = [[],[],[]]
 HASH_SORTED = []
 
 #functions
+def any_to_sha256(in1):
+    output = ''
+    with open(in1, "rb") as f:
+        h = sha256()
+        while c := f.read(8192):
+            h.update(c)
+    output = h.hexdigest()
+    print(output)
+    return output
+
 def clean_dupe_list():#incomplete
     for l1 in HASH_SORTED[0]:
         print(l1)#temporary
@@ -73,11 +83,14 @@ def list_to_sha256(FILES_SORTED,FOLDER):#incomplete
     
     for l1 in range(len(PATHS_SORTED)):
         for l2 in range(len(PATHS_SORTED[l1])):
-            with open(PATHS_SORTED[l1][l2], 'rb') as file:
-                #TEMP = str(file.read())
-                HASH_SORTED[l1].append(sha256(file.read()).hexdigest())#I/O crime
+            tmp1 = PATHS_SORTED[l1][l2]
+            HASH_SORTED[l1].append(any_to_sha256(tmp1))
+#            with open(PATHS_SORTED[l1][l2], 'rb') as file:
+#                TEMP = str(file.read())
+#                HASH_SORTED[l1].append(sha256(file.read()).hexdigest())#I/O crime
+                
             
-    print(HASH_SORTED[0][0])#temporary
+#    print(HASH_SORTED[0][0])#temporary
     
 #    for l1 in range(len(PATHS_SORTED)):
 #        for l2 in range(len(PATHS_SORTED[l1])):
