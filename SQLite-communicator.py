@@ -91,7 +91,7 @@ def list_to_sha256(FILES_SORTED,FOLDER,ALL):
         for l2 in range(len(PATHS_SORTED[l1])):
             HASH_SORTED[l1].append(any_to_sha256(PATHS_SORTED[l1][l2]))
             PROGRESS += 1
-            print("Progress: " + str(PROGRESS) + " of " + str(ALL), end="\r")
+            print("Hashed: " + str(PROGRESS) + " of " + str(ALL), end="\r")
     return HASH_SORTED
 
 def load_db_to_list(): #TODO make
