@@ -7,7 +7,7 @@ import sqlite3
 #variables
 ALL = ''
 DB_NAME = 'sha256.sql'
-DEBUG = True
+DEBUG = True#set this to False if you want everything to work properly
 FIRST_LAUNCH = False
 FOLDER = '../mixed/'
 
