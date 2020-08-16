@@ -31,14 +31,6 @@ def any_to_sha256(FILES_SORTED):
     OUT = HASH.hexdigest()
     return OUT
 
-def clean_dupe_list():#incomplete
-    for l1 in HASH_SORTED[0]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[1]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[2]:
-        print(l1)#temporary
-
 def clean_sha256(HASH_SORTED):#incomplete
     HASH_SORTED_CLEAN = [[],[],[]]
     for l1 in range(len(HASH_SORTED[0])):
@@ -140,20 +132,20 @@ if DEBUG:
     FILES_SORTED[2].clear()
 ALL = all_files(FILES_SORTED)#Then count all the files to display progress
 HASH_SORTED = list_to_sha256(FILES_SORTED,FOLDER,ALL)#Then the file list gets converted to a sha256 list 
-#HASH_SORTED = clean_sha256(HASH_SORTED)#Then the sha256 list gets cleaned of duplicates
-#dupes_to_dupe_list()#Then the duplicated files get into a dupe list
-#move_dirty()#Then duplicates are being moved to a DUPES folder
-#clean_dupe_list()#Then the dupe list gets removed
+HASH_SORTED = clean_sha256(HASH_SORTED)#Then the sha256 list gets cleaned of duplicates
+##dupes_to_dupe_list()#Then the duplicated files get into a dupe list
+##move_dirty()#Then duplicates are being moved to a DUPES folder
+##Then the dupe list gets removed
 if not FIRST_LAUNCH:
-    #load_db_to_list()#Then database lists get loaded in
-    #clean_sha256_with_db()#Then database lists get compared to each of the representing groups of sha256 lists
+    ##load_db_to_list()#Then database lists get loaded in
+    ##clean_sha256_with_db()#Then database lists get compared to each of the representing groups of sha256 lists
     void()
 #merge_sha256_with_db()#Then the cleaned sha256 list gets merged into the database
-#move_dirty()#Then the last duplicate files get moved to DUPES folder
-#clean_dupe_list()#Then the dupe list gets removed
-#move_clean()#Then remaining files get moved to the UPLOAD folder
-#stats()#Then the statistics get displayed
+##move_dirty()#Then the last duplicate files get moved to DUPES folder
+##Then the dupe list gets removed
+##move_clean()#Then remaining files get moved to the UPLOAD folder
+###stats()#Then the statistics get displayed
 
-#TODO add progress visualization
+#TODO add more progress visualization
 
 #print(HASH_SORTED)#temporary
