@@ -32,7 +32,7 @@ def any_to_sha256(FILES_SORTED):
     return OUT
 
 def clean_sha256(HASH_SORTED):#untested
-    HASH_DUPES = [[],[],[]]
+    #HASH_DUPES = [[],[],[]]
     HASH_SORTED_CLEAN = [[],[],[]]
     for l1 in range(len(HASH_SORTED)):
         for l2 in range(len(HASH_SORTED[l1])):
@@ -52,7 +52,7 @@ def create_db():
     FIRST_LAUNCH = True
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    c.execute('''CREATE TABLE LIST([files] text, [photos] text, [videos] text)''')
+    c.execute('CREATE TABLE SHA256(files text, photos text, videos text)')
     conn.commit()
     conn.close()
     return FIRST_LAUNCH
@@ -85,7 +85,19 @@ def load_db_to_list(): #TODO make
     void()
 
 def merge_sha256_with_db():#incomplete
-    void()
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    for l1 in range(len(HASH_SORTED[0])):
+        params = HASH_SORTED[0][l1]
+        c.execute('INSERT INTO SHA256(files) VALUES(?)',params)
+    for l1 in range(len(HASH_SORTED[1])):
+        params = HASH_SORTED[1][l1]
+        c.execute('INSERT INTO SHA256(images) VALUES(?)',params)
+    for l1 in range(len(HASH_SORTED[2])):
+        params = HASH_SORTED[2][l1]
+        c.execute('INSERT INTO SHA256(videos) VALUES(?)',params)
+    conn.commit()
+    conn.close()
 
 def move_clean():#incomplete
     void()
@@ -116,7 +128,7 @@ if not FIRST_LAUNCH:
     ##load_db_to_list()#Then database lists get loaded in
     ##clean_sha256_with_db()#Then database lists get compared to each of the representing groups of sha256 lists
     void()
-#merge_sha256_with_db()#Then the cleaned sha256 list gets merged into the database
+merge_sha256_with_db()#Then the cleaned sha256 list gets merged into the database
 ##move_dirty()#Then the last duplicate files get moved to DUPES folder
 ##move_clean()#Then remaining files get moved to the UPLOAD folder
 ###stats()#Then the statistics get displayed
