@@ -112,9 +112,6 @@ if DEBUG:
 ALL = all_files(FILES_SORTED)#Then count all the files to display progress
 HASH_SORTED = list_to_sha256(FILES_SORTED,FOLDER,ALL)#Then the file list gets converted to a sha256 list 
 HASH_SORTED = clean_sha256(HASH_SORTED)#Then the sha256 list gets cleaned of duplicates
-##dupes_to_dupe_list()#Then the duplicated files get into a dupe list
-##move_dirty()#Then duplicates are being moved to a DUPES folder
-##Then the dupe list gets removed
 if not FIRST_LAUNCH:
     ##load_db_to_list()#Then database lists get loaded in
     ##clean_sha256_with_db()#Then database lists get compared to each of the representing groups of sha256 lists
