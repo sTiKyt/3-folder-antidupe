@@ -118,7 +118,6 @@ if not FIRST_LAUNCH:
     void()
 #merge_sha256_with_db()#Then the cleaned sha256 list gets merged into the database
 ##move_dirty()#Then the last duplicate files get moved to DUPES folder
-##Then the dupe list gets removed
 ##move_clean()#Then remaining files get moved to the UPLOAD folder
 ###stats()#Then the statistics get displayed
 
