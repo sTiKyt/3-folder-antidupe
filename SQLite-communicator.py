@@ -31,21 +31,22 @@ def any_to_sha256(FILES_SORTED):
     OUT = HASH.hexdigest()
     return OUT
 
-def clean_sha256(HASH_SORTED):#incomplete
+def clean_sha256(HASH_SORTED):#untested
+    HASH_DUPES = [[],[],[]]
     HASH_SORTED_CLEAN = [[],[],[]]
-    for l1 in range(len(HASH_SORTED[0])):
-        HASH_SORTED_CLEAN[0].append(HASH_SORTED[0][l1])
+    for l1 in range(len(HASH_SORTED)):
+        for l2 in range(len(HASH_SORTED[l1])):
+            #HASH_DUPES[l1].append(HASH_SORTED[l1][l2])
+            if HASH_SORTED[l1].count(HASH_SORTED[l1][l2]) > 1:
+                #HASH_DUPES[l1].append(HASH_SORTED[l1][l2])
+                HASH_SORTED[l1][l2] = '0'
+            HASH_SORTED_CLEAN[l1].append(HASH_SORTED[l1][l2])
 
-    print(HASH_SORTED_CLEAN[0])#temporary
+    #print(str(HASH_DUPES))#temporary
     return HASH_SORTED_CLEAN
 
 def clean_sha256_with_db():#incomplete
-    for l1 in HASH_SORTED[0]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[1]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[2]:
-        print(l1)#temporary
+    void()
 
 def create_db():
     FIRST_LAUNCH = True
@@ -55,14 +56,6 @@ def create_db():
     conn.commit()
     conn.close()
     return FIRST_LAUNCH
-
-def dupes_to_dupe_list():#incomplete
-    for l1 in HASH_SORTED[0]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[1]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[2]:
-        print(l1)#temporary
 
 def folder_to_list(FOLDER):
     FILES_SORTED[0] = listdir(FOLDER+'files/')
@@ -85,34 +78,20 @@ def list_to_sha256(FILES_SORTED,FOLDER,ALL):
             HASH_SORTED[l1].append(any_to_sha256(PATHS_SORTED[l1][l2]))
             PROGRESS += 1
             print("Hashed: " + str(PROGRESS) + " of " + str(ALL), end="\r")
+    print('')
     return HASH_SORTED
 
 def load_db_to_list(): #TODO make
     void()
 
 def merge_sha256_with_db():#incomplete
-    for l1 in HASH_SORTED[0]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[1]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[2]:
-        print(l1)#temporary
+    void()
 
 def move_clean():#incomplete
-    for l1 in HASH_SORTED[0]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[1]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[2]:
-        print(l1)#temporary
+    void()
 
 def move_dirty():#incomplete
-    for l1 in HASH_SORTED[0]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[1]:
-        print(l1)#temporary
-    for l1 in HASH_SORTED[2]:
-        print(l1)#temporary
+    void()
 
 def stats(): #TODO make
     void()
@@ -128,7 +107,7 @@ if not path.isfile(DB_NAME):#If the database doesn't exists
 FILES_SORTED = folder_to_list(FOLDER)#Then the folder files get into the file list
 if DEBUG:
     FILES_SORTED[0].clear()
-    FILES_SORTED[1][1:-1].clear()
+    del FILES_SORTED[1][1:-1]
     FILES_SORTED[2].clear()
 ALL = all_files(FILES_SORTED)#Then count all the files to display progress
 HASH_SORTED = list_to_sha256(FILES_SORTED,FOLDER,ALL)#Then the file list gets converted to a sha256 list 
