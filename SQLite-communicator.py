@@ -16,7 +16,7 @@ FILES_SORTED = [[],[],[]]
 HASH_SORTED = []
 
 #functions
-def all_files(FILES_SORTED):
+def total(FILES_SORTED):
     NUMBER = 0
     for l1 in range(len(FILES_SORTED)):
         for _ in range(len(FILES_SORTED[l1])):
@@ -86,18 +86,26 @@ def list_to_sha256(FILES_SORTED,FOLDER,ALL):
 def load_db_to_list(): #TODO make
     void()
 
-def merge_sha256_with_db():
+def merge_sha256_with_db(ALL):
+    PROGRESS = 0
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     for l1 in range(len(HASH_SORTED[0])):
         params = HASH_SORTED[0][l1]
         c.execute('INSERT INTO files VALUES(?)',(params,))
+        PROGRESS += 1
+        print("Stored: " + str(PROGRESS) + " of " + str(ALL), end="\r")
     for l1 in range(len(HASH_SORTED[1])):
         params = HASH_SORTED[1][l1]
         c.execute('INSERT INTO images VALUES(?)',(params,))
+        PROGRESS += 1
+        print("Stored: " + str(PROGRESS) + " of " + str(ALL), end="\r")
     for l1 in range(len(HASH_SORTED[2])):
         params = HASH_SORTED[2][l1]
         c.execute('INSERT INTO videos VALUES(?)',(params,))
+        PROGRESS += 1
+        print("Stored: " + str(PROGRESS) + " of " + str(ALL), end="\r")
+    print('')
     conn.commit()
     conn.close()
 
@@ -123,14 +131,15 @@ if DEBUG:
     FILES_SORTED[0].clear()
     del FILES_SORTED[1][1:-1]
     FILES_SORTED[2].clear()
-ALL = all_files(FILES_SORTED)#Then count all the files to display progress
+ALL = total(FILES_SORTED)#Then count all the files to display progress
 HASH_SORTED = list_to_sha256(FILES_SORTED,FOLDER,ALL)#Then the file list gets converted to a sha256 list 
 HASH_SORTED = clean_sha256(HASH_SORTED)#Then the sha256 list gets cleaned of duplicates
 if not FIRST_LAUNCH:
     ##load_db_to_list()#Then database lists get loaded in
     ##clean_sha256_with_db()#Then database lists get compared to each of the representing groups of sha256 lists
     void()
-merge_sha256_with_db()#Then the cleaned sha256 list gets merged into the database
+ALL = total(HASH_SORTED)
+merge_sha256_with_db(ALL)#Then the cleaned sha256 list gets merged into the database
 ##move_dirty()#Then the last duplicate files get moved to DUPES folder
 ##move_clean()#Then remaining files get moved to the UPLOAD folder
 ###stats()#Then the statistics get displayed
