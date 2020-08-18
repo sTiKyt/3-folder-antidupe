@@ -52,7 +52,9 @@ def create_db():
     FIRST_LAUNCH = True
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    c.execute('CREATE TABLE SHA256(files text, photos text, videos text)')
+    c.execute('CREATE TABLE files(sha256 text)')
+    c.execute('CREATE TABLE images(sha256 text)')
+    c.execute('CREATE TABLE videos(sha256 text)')
     conn.commit()
     conn.close()
     return FIRST_LAUNCH
@@ -84,18 +86,18 @@ def list_to_sha256(FILES_SORTED,FOLDER,ALL):
 def load_db_to_list(): #TODO make
     void()
 
-def merge_sha256_with_db():#incomplete
+def merge_sha256_with_db():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     for l1 in range(len(HASH_SORTED[0])):
         params = HASH_SORTED[0][l1]
-        c.execute('INSERT INTO SHA256(files) VALUES(?)',params)
+        c.execute('INSERT INTO files VALUES(?)',(params,))
     for l1 in range(len(HASH_SORTED[1])):
         params = HASH_SORTED[1][l1]
-        c.execute('INSERT INTO SHA256(images) VALUES(?)',params)
+        c.execute('INSERT INTO images VALUES(?)',(params,))
     for l1 in range(len(HASH_SORTED[2])):
         params = HASH_SORTED[2][l1]
-        c.execute('INSERT INTO SHA256(videos) VALUES(?)',params)
+        c.execute('INSERT INTO videos VALUES(?)',(params,))
     conn.commit()
     conn.close()
 
