@@ -1,4 +1,3 @@
-from hashlib import blake2b
 from hashlib import sha256
 from os import listdir
 from os import path
