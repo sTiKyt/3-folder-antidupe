@@ -76,12 +76,18 @@ def list_to_sha256(files_sorted,folder,total):
     print('')
     return hash_sorted
 
-def load_base_to_list(base_name): #TODO make
+def load_base_to_list(base_name):
     base_list = [[],[],[]]
-    #conn = sqlite3.connect(base_name)
-    #c = conn.cursor()
-    #c.execute('')
-    #print(c.fetchall())
+    with open(base_name+'/files', 'r') as f:
+        for line in f.readlines():
+            base_list[0].append(line.strip())
+    with open(base_name+'/photos', 'r') as f:
+        for line in f.readlines():
+            base_list[1].append(line.strip())
+    with open(base_name+'/videos', 'r') as f:
+        for line in f.readlines():
+            base_list[2].append(line.strip())
+    #print(base_list[1][1])#temporary
     return base_list
 
 def merge_sha256_with_base(total):
@@ -122,14 +128,14 @@ if not path.exists(base_name):#If the database doesn't exists
 
 files_sorted = folder_to_list(folder)#Then the folder files get into the file list
 if debug:
-    files_sorted[0].clear()
+    del files_sorted[0][1:-1]
     del files_sorted[1][1:-1]
-    files_sorted[2].clear()
+    del files_sorted[2][1:-1]
 total = tots(files_sorted)#Then count all the files to display progress
 hash_sorted = list_to_sha256(files_sorted,folder,total)#Then the file list gets converted to a sha256 list 
 hash_sorted = clean_sha256(hash_sorted)#Then the sha256 list gets cleaned of duplicates
 if not first_launch:
-    #base_list = load_base_to_list(base_name)#Then database lists get loaded in
+    base_list = load_base_to_list(base_name)#Then database lists get loaded in
     ##clean_sha256_with_base()#Then database lists get compared to each of the representing groups of sha256 lists
     void()
 total = tots(hash_sorted)
