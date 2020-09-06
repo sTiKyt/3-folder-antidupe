@@ -22,13 +22,13 @@ def tots(files_sorted):
             number += 1
     return number
 
-def any_to_sha256(files_sorted):
-    with open(files_sorted, "rb") as f:
-        hash = sha256()
-        while chunk := f.read(8192):
-            hash.update(chunk)
-    out = hash.hexdigest()
-    return out
+#def any_to_sha256(files_sorted):           #Will be removed after the whole program is complete, currently merged with list_to_sha256
+#    with open(files_sorted, "rb") as f:
+#        hash = sha256()
+#        while chunk := f.read(8192):
+#            hash.update(chunk)
+#    out = hash.hexdigest()
+#    return out
 
 def clean_sha256(hash_sorted):#untested
     #HASH_DUPES = [[],[],[]]
@@ -44,8 +44,32 @@ def clean_sha256(hash_sorted):#untested
     #print(str(HASH_DUPES))#temporary
     return hash_sorted_clean
 
-def clean_sha256_with_base():#incomplete
-    void()
+def clean_sha256_with_base(base_list,hash_sorted):
+    #base_list_out = [[],[],[]]
+    progress = 0
+    for l1 in range(len(hash_sorted[0])):
+        if hash_sorted[0][l1] in base_list[0]:
+            progress += 1
+            print("Duplicates: " + str(progress) + " out of " + str(total), end="\r")
+            hash_sorted[0][l1] = '0'
+    for l1 in range(len(hash_sorted[1])):
+        if hash_sorted[1][l1] in base_list[1]:
+            progress += 1
+            print("Duplicates: " + str(progress) + " out of " + str(total), end="\r")
+            hash_sorted[1][l1] = '0'
+    for l1 in range(len(hash_sorted[2])):
+        if hash_sorted[2][l1] in base_list[2]:
+            progress += 1
+            print("Duplicates: " + str(progress) + " out of " + str(total), end="\r")
+            hash_sorted[2][l1] = '0'
+    if progress == 0:
+        print('No duplicates found!                ')#16 "spaces" give enough room for masking the symbols written before
+    if progress == total:
+        print('There is not a single new file.     ')
+    else:
+        print('')
+    hash_sorted_out = hash_sorted
+    return hash_sorted_out
 
 def create_base():
     first_launch = True
@@ -62,15 +86,22 @@ def list_to_sha256(files_sorted,folder,total):
     hash_sorted = [[],[],[]]
     paths_sorted = [[],[],[]]
     progress = 0
+    workfolder = folder+'files/'
     for l1 in range(len(files_sorted[0])):
-        paths_sorted[0].append(folder+'files/'+files_sorted[0][l1])
+        paths_sorted[0].append(workfolder+files_sorted[0][l1])
+    workfolder = folder+'photos/'
     for l1 in range(len(files_sorted[1])):
-        paths_sorted[1].append(folder+'photos/'+files_sorted[1][l1])
+        paths_sorted[1].append(workfolder+files_sorted[1][l1])
+    workfolder = folder+'videos/'
     for l1 in range(len(files_sorted[2])):
-        paths_sorted[2].append(folder+'videos/'+files_sorted[2][l1])
+        paths_sorted[2].append(workfolder+files_sorted[2][l1])
     for l1 in range(len(paths_sorted)):
         for l2 in range(len(paths_sorted[l1])):
-            hash_sorted[l1].append(any_to_sha256(paths_sorted[l1][l2]))
+            with open(paths_sorted[l1][l2], "rb") as f:
+                hash = sha256()
+                while chunk := f.read(8192):
+                    hash.update(chunk)
+            hash_sorted[l1].append(hash.hexdigest())
             progress += 1
             print("Hashed: " + str(progress) + " of " + str(total), end="\r")
     print('')
@@ -78,7 +109,7 @@ def list_to_sha256(files_sorted,folder,total):
 
 def load_base_to_list(base_name):
     base_list = [[],[],[]]
-    with open(base_name+'/files', 'r') as f:
+    with open(base_name+'/files', 'r') as f: #0
         for line in f.readlines():
             base_list[0].append(line.strip())
     with open(base_name+'/photos', 'r') as f:
@@ -107,7 +138,10 @@ def merge_sha256_with_base(total):
             f.write(hash_sorted[2][l1]+'\n')
             progress += 1
             print("Stored: " + str(progress) + " of " + str(total), end="\r")
-    print('')
+    if progress == 0:
+        print('Nothing to merge!')
+    else:
+        print('')
 
 def move_clean():#incomplete
     void()
@@ -128,16 +162,18 @@ if not path.exists(base_name):#If the database doesn't exists
 
 files_sorted = folder_to_list(folder)#Then the folder files get into the file list
 if debug:
-    del files_sorted[0][1:-1]
-    del files_sorted[1][1:-1]
-    del files_sorted[2][1:-1]
+    del files_sorted[0][0:-1]
+    del files_sorted[1][0:-1]
+    del files_sorted[2][0:-1]
 total = tots(files_sorted)#Then count all the files to display progress
-hash_sorted = list_to_sha256(files_sorted,folder,total)#Then the file list gets converted to a sha256 list 
+hash_sorted = list_to_sha256(files_sorted,folder,total)#Then the file list gets converted to a sha256 list
 hash_sorted = clean_sha256(hash_sorted)#Then the sha256 list gets cleaned of duplicates
 if not first_launch:
     base_list = load_base_to_list(base_name)#Then database lists get loaded in
-    ##clean_sha256_with_base()#Then database lists get compared to each of the representing groups of sha256 lists
-    void()
+    hash_sorted = clean_sha256_with_base(base_list,hash_sorted)#Then database lists get compared to each of the representing groups of sha256 lists
+    if debug:################################temporary?
+        for l1 in range(len(hash_sorted)):  #
+            hash_sorted[l1].remove('0')######
 total = tots(hash_sorted)
 merge_sha256_with_base(total)#Then the cleaned sha256 list gets merged into the database
 ##move_dirty()#Then the last duplicate files get moved to DUPES folder
@@ -147,3 +183,4 @@ merge_sha256_with_base(total)#Then the cleaned sha256 list gets merged into the 
 #TODO add more progress visualization
 
 #print(hash_sorted)#temporary
+print('put stats here')
