@@ -125,19 +125,22 @@ def merge_sha256_with_base(total):
     progress = 0
     with open(base_name+'/files', 'a') as f:
         for l1 in range(len(hash_sorted[0])):
-            f.write(hash_sorted[0][l1]+'\n')
-            progress += 1
-            print("Stored: " + str(progress) + " of " + str(total), end="\r")
+            if not hash_sorted[0][l1] == '0':
+                f.write(hash_sorted[0][l1]+'\n')
+                progress += 1
+                print("Stored: " + str(progress) + " of " + str(total), end="\r")
     with open(base_name+'/photos', 'a') as f:
         for l1 in range(len(hash_sorted[1])):
-            f.write(hash_sorted[1][l1]+'\n')
-            progress += 1
-            print("Stored: " + str(progress) + " of " + str(total), end="\r")
+            if not hash_sorted[1][l1] == '0':
+                f.write(hash_sorted[1][l1]+'\n')
+                progress += 1
+                print("Stored: " + str(progress) + " of " + str(total), end="\r")
     with open(base_name+'/videos', 'a') as f:
         for l1 in range(len(hash_sorted[2])):
-            f.write(hash_sorted[2][l1]+'\n')
-            progress += 1
-            print("Stored: " + str(progress) + " of " + str(total), end="\r")
+            if not hash_sorted[2][l1] == '0':
+                f.write(hash_sorted[2][l1]+'\n')
+                progress += 1
+                print("Stored: " + str(progress) + " of " + str(total), end="\r")
     if progress == 0:
         print('Nothing to merge!')
     else:
@@ -151,8 +154,6 @@ def move_dirty():#incomplete
         mkdir(folder+'../dupes/')
     for l1 in range(len(hash_sorted)):
         if not hash_sorted[l1].count('0') == 0:
-            if not path.exists(folder+'../dupes/'+str(l1+1)):
-                mkdir(folder+'../dupes/'+str(l1+1))
             for l2 in range(len(hash_sorted[l1])):
                 if hash_sorted[l1][l2] == '0':
                     sf = 'files/'
@@ -160,6 +161,8 @@ def move_dirty():#incomplete
                         sf = 'photos/'
                     if l1 == 2:
                         sf = 'videos/'
+                    if not path.exists(folder+'../dupes/'+sf):
+                        mkdir(folder+'../dupes/'+sf)
                     print(folder+sf+files_sorted[l1][l2])
 
 
