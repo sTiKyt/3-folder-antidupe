@@ -150,7 +150,7 @@ def merge_sha256_with_base(total):
 def move_clean():#incomplete
     void()
 
-def move_dirty():#incomplete
+def move_dirty():
     if not path.exists(folder+'../dupes/'):
         mkdir(folder+'../dupes/')
     dupes = folder+'../dupes/'
