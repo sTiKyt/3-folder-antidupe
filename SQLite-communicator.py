@@ -147,7 +147,21 @@ def move_clean():#incomplete
     void()
 
 def move_dirty():#incomplete
-    void()
+    if not path.exists(folder+'../dupes/'):
+        mkdir(folder+'../dupes/')
+    for l1 in range(len(hash_sorted)):
+        if not hash_sorted[l1].count('0') == 0:
+            if not path.exists(folder+'../dupes/'+str(l1+1)):
+                mkdir(folder+'../dupes/'+str(l1+1))
+            for l2 in range(len(hash_sorted[l1])):
+                if hash_sorted[l1][l2] == '0':
+                    sf = 'files/'
+                    if l1 == 1:
+                        sf = 'photos/'
+                    if l1 == 2:
+                        sf = 'videos/'
+                    print(folder+sf+files_sorted[l1][l2])
+
 
 def stats(): #TODO make
     void()
@@ -159,7 +173,6 @@ def void():
 #main
 if not path.exists(base_name):#If the database doesn't exists
     first_launch = create_base()#We create it and note that down
-
 files_sorted = folder_to_list(folder)#Then the folder files get into the file list
 if debug:
     del files_sorted[0][0:-1]
@@ -171,16 +184,15 @@ hash_sorted = clean_sha256(hash_sorted)#Then the sha256 list gets cleaned of dup
 if not first_launch:
     base_list = load_base_to_list(base_name)#Then database lists get loaded in
     hash_sorted = clean_sha256_with_base(base_list,hash_sorted)#Then database lists get compared to each of the representing groups of sha256 lists
-    if debug:################################temporary?
-        for l1 in range(len(hash_sorted)):  #
-            hash_sorted[l1].remove('0')######
+#    if debug:################################temporary
+#        for l1 in range(len(hash_sorted)):  #
+#            hash_sorted[l1].remove('0')######
 total = tots(hash_sorted)
 merge_sha256_with_base(total)#Then the cleaned sha256 list gets merged into the database
-##move_dirty()#Then the last duplicate files get moved to DUPES folder
+move_dirty()#Then the last duplicate files get moved to DUPES folder
 ##move_clean()#Then remaining files get moved to the UPLOAD folder
 ###stats()#Then the statistics get displayed
 
 #TODO add more progress visualization
 
 #print(hash_sorted)#temporary
-print('put stats here')
