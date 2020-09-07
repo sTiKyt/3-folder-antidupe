@@ -2,6 +2,7 @@ from hashlib import sha256
 from os import listdir
 from os import mkdir
 from os import path
+from os import rename
 
 #variables
 base_name = 'mixed'
@@ -152,6 +153,7 @@ def move_clean():#incomplete
 def move_dirty():#incomplete
     if not path.exists(folder+'../dupes/'):
         mkdir(folder+'../dupes/')
+    dupes = folder+'../dupes/'
     for l1 in range(len(hash_sorted)):
         if not hash_sorted[l1].count('0') == 0:
             for l2 in range(len(hash_sorted[l1])):
@@ -163,7 +165,7 @@ def move_dirty():#incomplete
                         sf = 'videos/'
                     if not path.exists(folder+'../dupes/'+sf):
                         mkdir(folder+'../dupes/'+sf)
-                    print(folder+sf+files_sorted[l1][l2])
+                    rename(folder+sf+files_sorted[l1][l2],dupes+sf+files_sorted[l1][l2])
 
 
 def stats(): #TODO make
