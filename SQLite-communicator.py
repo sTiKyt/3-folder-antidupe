@@ -7,7 +7,7 @@ from os import rename
 #variables
 base_name = 'mixed'
 total = ''
-debug = True#set this to False if you want everything to work properly
+debug = False
 first_launch = False
 folder = '../mixed/'
 
@@ -23,30 +23,16 @@ def tots(files_sorted):
             number += 1
     return number
 
-#def any_to_sha256(files_sorted):           #Will be removed after the whole program is complete, currently merged with list_to_sha256
-#    with open(files_sorted, "rb") as f:
-#        hash = sha256()
-#        while chunk := f.read(8192):
-#            hash.update(chunk)
-#    out = hash.hexdigest()
-#    return out
-
-def clean_sha256(hash_sorted):#untested
-    #HASH_DUPES = [[],[],[]]
+def clean_sha256(hash_sorted):
     hash_sorted_clean = [[],[],[]]
     for l1 in range(len(hash_sorted)):
         for l2 in range(len(hash_sorted[l1])):
-            #HASH_DUPES[l1].append(hash_sorted[l1][l2])
             if hash_sorted[l1].count(hash_sorted[l1][l2]) > 1:
-                #HASH_DUPES[l1].append(hash_sorted[l1][l2])
                 hash_sorted[l1][l2] = '0'
             hash_sorted_clean[l1].append(hash_sorted[l1][l2])
-
-    #print(str(HASH_DUPES))#temporary
     return hash_sorted_clean
 
 def clean_sha256_with_base(base_list,hash_sorted):
-    #base_list_out = [[],[],[]]
     progress = 0
     for l1 in range(len(hash_sorted[0])):
         if hash_sorted[0][l1] in base_list[0]:
@@ -110,7 +96,7 @@ def list_to_sha256(files_sorted,folder,total):
 
 def load_base_to_list(base_name):
     base_list = [[],[],[]]
-    with open(base_name+'/files', 'r') as f: #0
+    with open(base_name+'/files', 'r') as f:
         for line in f.readlines():
             base_list[0].append(line.strip())
     with open(base_name+'/photos', 'r') as f:
@@ -119,7 +105,6 @@ def load_base_to_list(base_name):
     with open(base_name+'/videos', 'r') as f:
         for line in f.readlines():
             base_list[2].append(line.strip())
-    #print(base_list[1][1])#temporary
     return base_list
 
 def merge_sha256_with_base(total):
@@ -147,7 +132,7 @@ def merge_sha256_with_base(total):
     else:
         print('')
 
-def move_clean(folder):#incomplete
+def move_clean(folder):
     folder = folder[:-1]
     rename(folder,folder+'_clean')
 
@@ -169,12 +154,12 @@ def move_dirty():
                     rename(folder+sf+files_sorted[l1][l2],dupes+sf+files_sorted[l1][l2])
 
 
-def stats(): #TODO make
-    void()
+#def stats(): #TODO make
+#    void()
 
 #THE ALMIGHTY VOID
-def void():
-    return
+#def void():
+#    return
 
 #main
 if not path.exists(base_name):#If the database doesn't exists
@@ -190,9 +175,6 @@ hash_sorted = clean_sha256(hash_sorted)#Then the sha256 list gets cleaned of dup
 if not first_launch:
     base_list = load_base_to_list(base_name)#Then database lists get loaded in
     hash_sorted = clean_sha256_with_base(base_list,hash_sorted)#Then database lists get compared to each of the representing groups of sha256 lists
-#    if debug:################################temporary
-#        for l1 in range(len(hash_sorted)):  #
-#            hash_sorted[l1].remove('0')######
 total = tots(hash_sorted)
 merge_sha256_with_base(total)#Then the cleaned sha256 list gets merged into the database
 move_dirty()#Then the last duplicate files get moved to DUPES folder
