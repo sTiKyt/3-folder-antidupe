@@ -147,8 +147,9 @@ def merge_sha256_with_base(total):
     else:
         print('')
 
-def move_clean():#incomplete
-    void()
+def move_clean(folder):#incomplete
+    folder = folder[:-1]
+    rename(folder,folder+'_clean')
 
 def move_dirty():
     if not path.exists(folder+'../dupes/'):
@@ -195,7 +196,7 @@ if not first_launch:
 total = tots(hash_sorted)
 merge_sha256_with_base(total)#Then the cleaned sha256 list gets merged into the database
 move_dirty()#Then the last duplicate files get moved to DUPES folder
-##move_clean()#Then remaining files get moved to the UPLOAD folder
+move_clean(folder)#Then remaining files get moved to the UPLOAD folder
 ###stats()#Then the statistics get displayed
 
 #TODO add more progress visualization
