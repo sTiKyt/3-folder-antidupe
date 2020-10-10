@@ -1,8 +1,5 @@
 from hashlib import sha256
-from os import listdir
-from os import mkdir
-from os import path
-from os import rename
+from os import listdir, mkdir, path, rename
 
 #variables
 base_name = 'mixed'
